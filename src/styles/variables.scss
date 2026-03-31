@@ -1,0 +1,39 @@
+// 主题变量
+:root {
+  // 亮色主题
+  --primary-color: #409eff;
+  --success-color: #67c23a;
+  --warning-color: #e6a23c;
+  --danger-color: #f56c6c;
+  --info-color: #909399;
+
+  --bg-color: #f5f7fa;
+  --card-bg: #ffffff;
+  --text-primary: #303133;
+  --text-regular: #606266;
+  --text-secondary: #909399;
+  --border-color: #dcdfe6;
+
+  --sidebar-bg: #304156;
+  --sidebar-text: #bfcbd9;
+
+  --header-bg: #ffffff;
+  --header-height: 60px;
+
+  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// 暗色主题
+[data-theme='dark'] {
+  --bg-color: #1a1a1a;
+  --card-bg: #2d2d2d;
+  --text-primary: #e5e5e5;
+  --text-regular: #c0c0c0;
+  --text-secondary: #8c8c8c;
+  --border-color: #404040;
+
+  --sidebar-bg: #1e1e1e;
+  --sidebar-text: #a0a0a0;
+
+  --header-bg: #2d2d2d;
+}
