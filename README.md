@@ -13,6 +13,7 @@
 - 🎨 **双端架构** - 用户端 + 管理员端分离设计
 - 🌓 **深色模式** - 支持浅色/深色主题一键切换
 - 📱 **全响应式** - 完美适配桌面端、平板、手机
+- 📲 **原生移动应用** - 支持 Capacitor 打包成 Android/iOS 原生应用
 - 🔐 **权限管理** - 基于角色的路由权限控制
 - 🎯 **TypeScript** - 全程类型推导，更好的开发体验
 - ⚡ **Vite 驱动** - 极速的开发启动和热更新
@@ -29,6 +30,7 @@
 - **路由:** Vue Router
 - **动画:** GSAP
 - **样式:** SCSS
+- **移动端:** Capacitor（支持原生App打包）
 
 ## 🚀 快速开始
 
@@ -56,6 +58,24 @@ npm run build
 npm run preview
 ```
 
+## 📲 移动端打包
+
+项目集成 [Capacitor](https://capacitorjs.com/)，支持打包成 Android/iOS 原生应用：
+
+```bash
+# 构建网页资源
+npm run build
+
+# 同步资源到原生项目
+npx cap sync
+
+# 打开 Android Studio 编译调试
+npx cap open android
+
+# 打开 Xcode 编译调试（仅 macOS）
+npx cap open ios
+```
+
 ## 📁 项目结构
 
 ```
@@ -64,15 +84,20 @@ npm run preview
 │   │   └── user/       # 用户端组件
 │   ├── composables/     # 组合式函数
 │   ├── layouts/        # 布局组件
+│   ├── pages/          # 页面路由
 │   ├── router/         # 路由配置
 │   ├── services/       # API 服务
 │   ├── store/          # Pinia 状态管理
+│   │   └── modules/    # 状态模块
 │   ├── styles/         # 全局样式
 │   ├── types/          # 类型定义
 │   └── views/          # 页面视图
 │       ├── user/       # 用户端页面
-│       └── admin/      # 管理员端页面
-└── public/             # 静态资源
+│       ├── admin/      # 管理员端页面
+│       └── error/      # 错误页面
+├── public/             # 静态资源
+├── android/            # Android 原生工程（Capacitor）
+└── capacitor.config.ts # Capacitor 配置
 ```
 
 ## 🔄 路由说明
@@ -115,12 +140,27 @@ npm run preview
 
 ## 📝 环境变量
 
-创建 `.env` 文件：
+项目提供两个环境配置文件：
+
+- `.env.development` - 开发环境配置
+- `.env.production` - 生产环境配置
+
+可用环境变量：
 
 ```env
+# 应用标题
 VITE_APP_TITLE=CRUD Template
-VITE_API_BASE_URL=http://localhost:3000/api
+
+# API 基础地址
+VITE_APP_BASE_API=http://localhost:3000/api
+
+# 是否启用 Mock 数据（纯前端演示请设为 true）
+VITE_APP_MOCK_ENABLED=true
 ```
+
+**说明：**
+- 当 `VITE_APP_MOCK_ENABLED=true` 时，所有请求使用本地 Mock 数据，无需后端服务即可运行
+- 打包原生 App 演示时，请确保 `VITE_APP_MOCK_ENABLED=true`
 
 ## 🤝 贡献
 
