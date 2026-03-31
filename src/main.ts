@@ -5,6 +5,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import gsap from 'gsap'
+import { Capacitor } from '@capacitor/core'
 
 import App from './App.vue'
 import router from './router'
