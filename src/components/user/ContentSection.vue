@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { ArrowRight } from '@element-plus/icons-vue'
 import type { ContentCard } from '@/types'
 import gsap from 'gsap'
@@ -88,6 +88,16 @@ onMounted(() => {
   }
 })
 
+onUnmounted(() => {
+  // 清理所有 GSAP 动画
+  if (sectionRef.value) {
+    gsap.killTweensOf(sectionRef.value)
+  }
+  if (cardRefs.value.length) {
+    cardRefs.value.forEach(card => gsap.killTweensOf(card))
+  }
+})
+
 const handleCardClick = (card: ContentCard) => {
   emit('cardClick', card)
 }
@@ -103,7 +113,7 @@ const handleLoadMore = () => {
   max-width: 1400px;
   margin: 0 auto;
 
-  @media (max-width: 76868px) {
+  @media (max-width: 768px) {
     padding: 40px 16px;
   }
 }

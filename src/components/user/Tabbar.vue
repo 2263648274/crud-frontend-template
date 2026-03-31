@@ -5,7 +5,7 @@
       :key="item.path"
       :to="item.path"
       class="tabbar-item"
-      active-class="active"
+      :class="{ active: isActive(item.path) }"
     >
       <el-icon :size="24">
         <component :is="item.icon" />
@@ -17,18 +17,28 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { House, Document, Setting } from '@element-plus/icons-vue'
+import { useRoute } from 'vue-router'
+import { House, Document, User } from '@element-plus/icons-vue'
 
+const route = useRoute()
 const isMobile = ref(false)
 
 const tabbarItems = [
   { path: '/', title: '首页', icon: House },
   { path: '/features', title: '功能', icon: Document },
-  { path: '/about', title: '我的', icon: Setting }
+  { path: '/profile', title: '我的', icon: User }
 ]
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 768
+}
+
+// 判断当前路由是否激活
+const isActive = (path: string) => {
+  if (path === '/') {
+    return route.path === '/'
+  }
+  return route.path === path
 }
 
 onMounted(() => {
@@ -51,15 +61,11 @@ onUnmounted(() => {
   justify-content: space-around;
   align-items: center;
   height: 60px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--header-bg);
   backdrop-filter: blur(10px);
   border-top: 1px solid var(--border-color);
   z-index: 1000;
   padding-bottom: env(safe-area-inset-bottom);
-
-  [data-theme='dark'] & {
-    background: rgba(45, 45, 45, 0.95);
-  }
 
   .tabbar-item {
     display: flex;

@@ -1,7 +1,7 @@
 <template>
   <div class="user-manage">
     <!-- 搜索表单 -->
-    <el-card class="search-card" shadow="never">
+    <div class="search-card linear-card mb-5">
       <el-form :model="searchForm" inline>
         <el-form-item label="用户名">
           <el-input v-model="searchForm.username" placeholder="请输入用户名" clearable />
@@ -16,23 +16,23 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
-          <el-button :icon="Refresh" @click="handleReset">重置</el-button>
+          <button class="linear-btn linear-btn--primary" :icon="Search" @click="handleSearch">搜索</button>
+          <button class="linear-btn linear-btn--secondary" :icon="Refresh" @click="handleReset">重置</button>
         </el-form-item>
       </el-form>
-    </el-card>
+    </div>
 
     <!-- 操作按钮 -->
-    <div class="action-bar">
-      <el-button type="primary" :icon="Plus" @click="handleAdd">新增用户</el-button>
-      <el-button type="danger" :icon="Delete" :disabled="!selectedRows.length" @click="handleBatchDelete">
+    <div class="action-bar mb-4">
+      <button class="linear-btn linear-btn--primary" :icon="Plus" @click="handleAdd">新增用户</button>
+      <button class="linear-btn linear-btn--secondary" :icon="Delete" :disabled="!selectedRows.length" @click="handleBatchDelete">
         批量删除
-      </el-button>
-      <el-button :icon="Download" @click="handleExport">导出</el-button>
+      </button>
+      <button class="linear-btn linear-btn--ghost" :icon="Download" @click="handleExport">导出</button>
     </div>
 
     <!-- 数据表格 -->
-    <el-card shadow="never">
+    <div class="linear-card">
       <el-table
         v-loading="loading"
         :data="tableData"
@@ -74,7 +74,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         style="margin-top: 20px; justify-content: flex-end"
       />
-    </el-card>
+    </div>
 
     <!-- 新增/编辑弹窗 -->
     <el-dialog
@@ -110,8 +110,8 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="submitLoading" @click="handleSubmit">确定</el-button>
+        <button class="linear-btn linear-btn--secondary" @click="dialogVisible = false">取消</button>
+        <button class="linear-btn linear-btn--primary" :loading="submitLoading" @click="handleSubmit">确定</button>
       </template>
     </el-dialog>
   </div>
@@ -121,7 +121,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { Plus, Edit, Delete, Search, Refresh, Download } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getUserList, deleteUser } from '@/services/api'
+import { getUserList, deleteUser, createUser, updateUser } from '@/services/api'
 import type { UserInfo } from '@/types'
 import type { FormInstance, FormRules } from 'element-plus'
 
@@ -229,10 +229,10 @@ const handleSubmit = async () => {
     submitLoading.value = true
     try {
       if (isEdit.value) {
-        // await updateUser(formData.id!, formData)
+        await updateUser(formData.id!, formData)
         ElMessage.success('更新成功')
       } else {
-        // await createUser(formData)
+        await createUser(formData)
         ElMessage.success('创建成功')
       }
       dialogVisible.value = false
@@ -286,12 +286,23 @@ const getRoleType = (role: string) => {
 
 <style scoped lang="scss">
 .user-manage {
-  .search-card {
+  .mb-4 {
+    margin-bottom: 16px;
+  }
+
+  .mb-5 {
     margin-bottom: 20px;
   }
 
+  .search-card {
+    position: relative;
+    overflow: hidden;
+  }
+
   .action-bar {
-    margin-bottom: 15px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
   }
 }
 </style>

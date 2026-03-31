@@ -84,6 +84,34 @@ export const deleteUser = (id: number): Promise<boolean> => {
   })
 }
 
+export const register = (data: {
+  username: string
+  password: string
+  nickname: string
+  email?: string
+  phone?: string
+}): Promise<{ token: string; userInfo: UserInfo }> => {
+  if (isMockEnabled) {
+    return Promise.resolve({
+      token: `mock-token-${Date.now()}`,
+      userInfo: {
+        id: Date.now(),
+        username: data.username,
+        nickname: data.nickname,
+        email: data.email || '',
+        phone: data.phone || '',
+        role: 'user',
+        status: 1
+      }
+    })
+  }
+  return request<{ token: string; userInfo: UserInfo }>({
+    url: '/user/register',
+    method: 'post',
+    data
+  })
+}
+
 // ========== 角色相关API ==========
 
 export const getRoleList = (params: RoleListParams): Promise<PageResult<RoleInfo>> => {

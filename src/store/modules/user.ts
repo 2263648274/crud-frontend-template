@@ -45,6 +45,12 @@ export const useUserStore = defineStore('user', {
       this.setUserInfo(userInfo)
     },
 
+    updateProfile(data: Partial<UserInfo>) {
+      if (this.userInfo) {
+        this.userInfo = { ...this.userInfo, ...data }
+      }
+    },
+
     logout() {
       this.token = ''
       this.userInfo = null

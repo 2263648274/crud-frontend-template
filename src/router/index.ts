@@ -4,7 +4,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 export const userRoutes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'UserLayout',
     component: () => import('@/layouts/UserLayout.vue'),
     children: [
       {
@@ -24,6 +23,12 @@ export const userRoutes: RouteRecordRaw[] = [
         name: 'About',
         component: () => import('@/views/user/About.vue'),
         meta: { title: '关于我们' }
+      },
+      {
+        path: 'profile',
+        name: 'UserProfile',
+        component: () => import('@/views/user/Profile.vue'),
+        meta: { title: '个人中心', requiresAuth: true }
       }
     ]
   }
@@ -36,6 +41,12 @@ export const adminRoutes: RouteRecordRaw[] = [
     name: 'AdminLogin',
     component: () => import('@/views/admin/Login.vue'),
     meta: { title: '登录', requiresAuth: false }
+  },
+  {
+    path: '/admin/register',
+    name: 'AdminRegister',
+    component: () => import('@/views/admin/Register.vue'),
+    meta: { title: '注册', requiresAuth: false }
   },
   {
     path: '/admin',
@@ -65,6 +76,12 @@ export const adminRoutes: RouteRecordRaw[] = [
         name: 'RoleManage',
         component: () => import('@/views/admin/RoleManage.vue'),
         meta: { title: '角色管理', icon: 'Lock', roles: ['admin'] }
+      },
+      {
+        path: 'profile',
+        name: 'AdminProfile',
+        component: () => import('@/views/admin/Profile.vue'),
+        meta: { title: '个人信息', icon: 'User', roles: ['admin', 'user'] }
       }
     ]
   }

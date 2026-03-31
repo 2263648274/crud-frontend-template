@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 
-type Theme = 'light' | 'dark'
+// Only two themes:
+// 'light' → Light mode (Linear design system structure, light colors)
+// 'linear' → Dark mode (Linear design system complete dark theme, display name is "深色模式")
+type Theme = 'light' | 'linear'
 
 interface ThemeState {
   theme: Theme
@@ -12,7 +15,8 @@ export const useThemeStore = defineStore('theme', {
   }),
 
   getters: {
-    isDark: (state) => state.theme === 'dark'
+    isDark: (state) => state.theme === 'linear',
+    isLinear: (state) => state.theme === 'linear'
   },
 
   actions: {
@@ -23,7 +27,8 @@ export const useThemeStore = defineStore('theme', {
     },
 
     toggleTheme() {
-      this.setTheme(this.theme === 'light' ? 'dark' : 'light')
+      // Toggle: light ↔ linear (dark)
+      this.setTheme(this.theme === 'light' ? 'linear' : 'light')
     },
 
     initTheme() {
@@ -31,10 +36,9 @@ export const useThemeStore = defineStore('theme', {
     },
 
     applyTheme() {
-      if (this.theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark')
-      } else {
-        document.documentElement.removeAttribute('data-theme')
+      document.documentElement.removeAttribute('data-theme')
+      if (this.theme !== 'light') {
+        document.documentElement.setAttribute('data-theme', this.theme)
       }
     }
   },

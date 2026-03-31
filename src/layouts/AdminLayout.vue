@@ -14,9 +14,9 @@
         :collapse="sidebarCollapsed"
         :unique-opened="true"
         router
-        background-color="#304156"
-        text-color="#bfcbd9"
-        active-text-color="#409eff"
+        background-color="var(--sidebar-bg)"
+        text-color="var(--sidebar-text)"
+        active-text-color="var(--primary-color)"
       >
         <template v-for="menuRoute in menuRoutes" :key="menuRoute.path">
           <el-sub-menu v-if="menuRoute.children && menuRoute.children.length" :index="menuRoute.path">
@@ -150,7 +150,7 @@ const toggleSidebar = () => {
 const handleCommand = (command: string) => {
   switch (command) {
     case 'profile':
-      ElMessage.info('个人中心功能开发中...')
+      router.push('/admin/profile')
       break
     case 'logout':
       ElMessageBox.confirm('确定要退出登录吗？', '提示', {
@@ -178,8 +178,9 @@ const handleCommand = (command: string) => {
 .sidebar {
   width: 220px;
   height: 100%;
-  background: #304156;
-  transition: width 0.3s;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
+  transition: width var(--transition-base);
   flex-shrink: 0;
   overflow-x: hidden;
 
@@ -196,13 +197,13 @@ const handleCommand = (command: string) => {
     display: flex;
     align-items: center;
     padding: 0 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
 
     .logo {
       display: flex;
       align-items: center;
       gap: 12px;
-      color: white;
+      color: var(--text-primary);
       text-decoration: none;
       font-size: 18px;
       font-weight: bold;
@@ -267,5 +268,32 @@ const handleCommand = (command: string) => {
   flex: 1;
   overflow: auto;
   padding: 20px;
+}
+
+// 移动端适配
+@media (max-width: 768px) {
+  .sidebar {
+    width: 0;
+    &:not(.collapsed) {
+      width: 200px;
+    }
+  }
+
+  .header {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .header-left .el-breadcrumb {
+    display: none;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .username {
+    display: none;
+  }
 }
 </style>

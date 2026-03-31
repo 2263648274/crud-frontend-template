@@ -15,7 +15,7 @@
           :key="item.path"
           :to="item.path"
           class="menu-item"
-          active-class="active"
+          :class="{ active: isActive(item.path) }"
         >
           {{ item.title }}
         </router-link>
@@ -23,11 +23,12 @@
 
       <!-- 右侧操作区 -->
       <div class="navbar-actions">
-        <!-- 主题切换 -->
+        <!-- 主题切换: light ↔ dark (linear) -->
         <el-button
-          :icon="themeStore.isDark ? Sunny : Moon"
+          :icon="getThemeIcon()"
           circle
           @click="themeStore.toggleTheme()"
+          :title="getThemeName()"
         />
 
         <!-- 用户信息 -->
@@ -40,7 +41,6 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="profile">个人中心</el-dropdown-item>
-              <el-dropdown-item command="admin">管理后台</el-dropdown-item>
               <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -52,13 +52,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useThemeStore, useUserStore } from '@/store'
 import { ElMessage } from 'element-plus'
 import { Moon, Sunny } from '@element-plus/icons-vue'
 import gsap from 'gsap'
 
 const router = useRouter()
+const route = useRoute()
 const themeStore = useThemeStore()
 const userStore = useUserStore()
 
@@ -71,13 +72,26 @@ const menuItems = [
   { path: '/about', title: '关于我们' }
 ]
 
+// 判断当前路由是否激活
+const isActive = (path: string) => {
+  if (path === '/') {
+    return route.path === '/'
+  }
+  return route.path === path
+}
+
+const getThemeIcon = () => {
+  return themeStore.isDark ? Moon : Sunny
+}
+
+const getThemeName = () => {
+  return themeStore.isDark ? '暗色模式' : '亮色模式'
+}
+
 const handleCommand = (command: string) => {
   switch (command) {
     case 'profile':
-      ElMessage.info('个人中心功能开发中...')
-      break
-    case 'admin':
-      router.push('/admin/dashboard')
+      router.push('/profile')
       break
     case 'logout':
       userStore.logout()
@@ -105,14 +119,10 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
-  transition: all 0.3s;
-
-  [data-theme='dark'] & {
-    background: rgba(45, 45, 45, 0.95);
-  }
+  transition: var(--transition-base);
 
   .navbar-container {
     max-width: 1200px;
@@ -129,7 +139,7 @@ onMounted(() => {
       font-size: 24px;
       font-weight: bold;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--primary-color) 0%, #764ba2 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -195,6 +205,19 @@ onMounted(() => {
   @media (max-width: 768px) {
     .navbar-menu {
       display: none;
+    }
+
+    .navbar-container {
+      padding: 0 12px;
+      height: 56px;
+    }
+
+    .navbar-logo h1 {
+      font-size: 20px;
+    }
+
+    .navbar-actions {
+      gap: 10px;
     }
   }
 }

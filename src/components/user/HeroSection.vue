@@ -49,6 +49,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { getHeroCards } from '@/services/api'
 import type { HeroCard } from '@/types'
 import gsap from 'gsap'
@@ -90,6 +91,13 @@ onMounted(async () => {
 
 onUnmounted(() => {
   stopAutoPlay()
+  // 清理所有 GSAP 动画
+  if (heroRef.value) {
+    gsap.killTweensOf(heroRef.value)
+  }
+  if (cardRefs.value.length) {
+    cardRefs.value.forEach(card => gsap.killTweensOf(card))
+  }
 })
 
 const switchCard = (index: number) => {

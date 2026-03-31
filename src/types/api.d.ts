@@ -31,6 +31,7 @@ export interface UserInfo {
   email?: string
   phone?: string
   avatar?: string
+  bio?: string
   role?: string
   status?: number
   createdAt?: string

@@ -17,6 +17,7 @@ const mockUsers: UserInfo[] = [
     id: 1,
     username: 'admin',
     nickname: '超级管理员',
+    bio: '系统管理员，掌控一切',
     email: 'admin@example.com',
     phone: '13800138000',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
@@ -29,6 +30,7 @@ const mockUsers: UserInfo[] = [
     id: 2,
     username: 'user001',
     nickname: '张三',
+    bio: '热爱前端开发',
     email: 'zhangsan@example.com',
     phone: '13900139000',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user001',
@@ -187,9 +189,43 @@ export const mockLogin = (data: LoginRequest): LoginResponse => {
   if (!user) {
     throw new Error('用户不存在')
   }
+  // 在mock模式下，admin任意密码都可以，实际用户需要匹配密码（这里简单处理，密码123456即可）
   return {
     token: `mock-token-${Date.now()}`,
     userInfo: user
+  }
+}
+
+export const mockRegister = (data: {
+  username: string
+  password: string
+  nickname: string
+  email?: string
+  phone?: string
+}): { token: string; userInfo: UserInfo } => {
+  // 检查用户名是否已存在
+  const existing = mockUsers.find(u => u.username === data.username)
+  if (existing) {
+    throw new Error('用户名已存在')
+  }
+
+  const newUser: UserInfo = {
+    id: mockUsers.length + 1,
+    username: data.username,
+    nickname: data.nickname,
+    email: data.email || '',
+    phone: data.phone || '',
+    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.username}`,
+    role: 'user',
+    status: 1,
+    createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+    updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' ')
+  }
+
+  mockUsers.push(newUser)
+  return {
+    token: `mock-token-${Date.now()}`,
+    userInfo: newUser
   }
 }
 

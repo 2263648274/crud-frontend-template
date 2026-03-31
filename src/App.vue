@@ -3,15 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
-
-onMounted(() => {
-  console.log('应用启动 - 通用前端CRUD模板 v1.0.0')
-})
-
-onUnmounted(() => {
-  console.log('应用卸载')
-})
+// 根组件不需要额外逻辑
 </script>
 
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <div class="role-manage">
     <!-- 搜索表单 -->
-    <el-card class="search-card" shadow="never">
+    <div class="search-card linear-card mb-5">
       <el-form :model="searchForm" inline>
         <el-form-item label="角色名称">
           <el-input v-model="searchForm.name" placeholder="请输入角色名称" clearable />
@@ -16,19 +16,19 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
-          <el-button :icon="Refresh" @click="handleReset">重置</el-button>
+          <button class="linear-btn linear-btn--primary" :icon="Search" @click="handleSearch">搜索</button>
+          <button class="linear-btn linear-btn--secondary" :icon="Refresh" @click="handleReset">重置</button>
         </el-form-item>
       </el-form>
-    </el-card>
+    </div>
 
     <!-- 操作按钮 -->
-    <div class="action-bar">
-      <el-button type="primary" :icon="Plus" @click="handleAdd">新增角色</el-button>
+    <div class="action-bar mb-4">
+      <button class="linear-btn linear-btn--primary" :icon="Plus" @click="handleAdd">新增角色</button>
     </div>
 
     <!-- 数据表格 -->
-    <el-card shadow="never">
+    <div class="linear-card">
       <el-table v-loading="loading" :data="tableData">
         <el-table-column type="index" label="序号" width="60" />
         <el-table-column prop="name" label="角色名称" width="150" />
@@ -59,7 +59,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         style="margin-top: 20px; justify-content: flex-end"
       />
-    </el-card>
+    </div>
 
     <!-- 新增/编辑弹窗 -->
     <el-dialog
@@ -91,8 +91,8 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="submitLoading" @click="handleSubmit">确定</el-button>
+        <button class="linear-btn linear-btn--secondary" @click="dialogVisible = false">取消</button>
+        <button class="linear-btn linear-btn--primary" :loading="submitLoading" @click="handleSubmit">确定</button>
       </template>
     </el-dialog>
   </div>
@@ -102,7 +102,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { Plus, Edit, Delete, Search, Refresh } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getRoleList } from '@/services/api'
+import { getRoleList, createRole, updateRole, deleteRole } from '@/services/api'
 import type { RoleInfo } from '@/types'
 import type { FormInstance, FormRules } from 'element-plus'
 
@@ -196,10 +196,10 @@ const handleSubmit = async () => {
     submitLoading.value = true
     try {
       if (isEdit.value) {
-        // await updateRole(formData.id!, formData)
+        await updateRole(formData.id!, formData)
         ElMessage.success('更新成功')
       } else {
-        // await createRole(formData)
+        await createRole(formData)
         ElMessage.success('创建成功')
       }
       dialogVisible.value = false
@@ -215,12 +215,12 @@ const handleDialogClose = () => {
 }
 
 const handleDelete = (row: RoleInfo) => {
-  ElMessageBox.confirm(`确定要删除角色"${row.name}"吗？`, '提示', {
+  ElMessageBox.confirm(`确定要删除角色 "${row.name}" 吗？`, '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(async () => {
-    // await deleteRole(row.id)
+    await deleteRole(row.id)
     ElMessage.success('删除成功')
     loadData()
   })
@@ -229,12 +229,23 @@ const handleDelete = (row: RoleInfo) => {
 
 <style scoped lang="scss">
 .role-manage {
-  .search-card {
+  .mb-4 {
+    margin-bottom: 16px;
+  }
+
+  .mb-5 {
     margin-bottom: 20px;
   }
 
+  .search-card {
+    position: relative;
+    overflow: hidden;
+  }
+
   .action-bar {
-    margin-bottom: 15px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
   }
 }
 </style>
